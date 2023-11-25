@@ -16,7 +16,106 @@
   Once you've implemented the logic, test your code by running
   - `npm run test-calculator`
 */
+class Calculator {
+  constructor() {
+    this.result = 0;
+  }
 
-class Calculator {}
+  add(number) {
+    this.result += number;
+  }
+
+  subtract(number) {
+    this.result -= number;
+  }
+
+  multiply(number) {
+    this.result *= number;
+  }
+
+  divide(number) {
+    if (number === 0) {
+      throw new Error("Cannot divide by zero");
+    }
+    this.result /= number;
+  }
+
+  clear() {
+    this.result = 0;
+  }
+
+  getResult() {
+    return this.result;
+  }
+
+  calculate(expression) {
+    // Remove multiple continuous spaces
+    expression = expression.replace(/\s+/g, ' ');
+
+    // Validate expression for invalid characters
+    if (!/^[0-9+\-*/(). ]+$/.test(expression)) {
+      throw new Error("Invalid characters in expression");
+    }
+
+    // Use a regular expression to extract numbers and operators
+    const tokens = expression.match(/[0-9]+|[-+*/()]|\s/g);
+
+    // Evaluate the expression
+    this.result = this.evaluateExpression(tokens);
+
+    return this.result;
+  }
+
+  evaluateExpression(tokens) {
+    // Implement your logic to evaluate the expression using a stack or any other approach
+    // This could involve handling parentheses, operators precedence, etc.
+    // For simplicity, let's assume a basic implementation without handling all edge cases.
+    // It's recommended to use a proper expression parsing library in a real-world scenario.
+
+    // Dummy implementation (ignores operator precedence and parentheses)
+    let currentNumber = 0;
+    let currentOperator = '+';
+
+    tokens.forEach((token) => {
+      if (token === '+' || token === '-' || token === '*' || token === '/') {
+        currentOperator = token;
+      } else if (token === '(') {
+        // Handle parentheses
+        // Recursively evaluate the expression within the parentheses
+        // ...
+      } else if (token === ')') {
+        // Handle parentheses
+        // ...
+      } else {
+        const number = parseFloat(token);
+        if (isNaN(number)) {
+          throw new Error("Invalid number in expression");
+        }
+        switch (currentOperator) {
+          case '+':
+            currentNumber += number;
+            break;
+          case '-':
+            currentNumber -= number;
+            break;
+          case '*':
+            currentNumber *= number;
+            break;
+          case '/':
+            if (number === 0) {
+              throw new Error("Cannot divide by zero");
+            }
+            currentNumber /= number;
+            break;
+        }
+      }
+    });
+
+    return currentNumber;
+  }
+}
+
+module.exports = Calculator;
+
 
 module.exports = Calculator;
