@@ -30,10 +30,11 @@ class Todo {
     if (indexOfTodo >= 0 && indexOfTodo < this.todos.length) {
       // Remove the todo at the specified index using splice
       this.todos.splice(indexOfTodo, 1);
-    } else {
-      // Throw an error for an invalid index
-      throw new Error("Invalid index");
-    }
+    } 
+    //else {
+    //   // Throw an error for an invalid index
+    //   throw new Error("Invalid index");
+    // }
   }
 
   // Method to update a todo at a specific index in the list
@@ -42,10 +43,11 @@ class Todo {
     if (index >= 0 && index < this.todos.length) {
       // Update the todo at the specified index with the provided value
       this.todos[index] = updatedTodo;
-    } else {
-      // Throw an error for an invalid index
-      throw new Error("Invalid index");
-    }
+    } 
+    // else {
+    //   // Throw an error for an invalid index
+    //   throw new Error("Invalid index");
+    // }
   }
 
   // Method to get all todos in the list
@@ -60,10 +62,12 @@ class Todo {
     if (indexOfTodo >= 0 && indexOfTodo < this.todos.length) {
       // Return the todo at the specified index
       return this.todos[indexOfTodo];
-    } else {
-      // Throw an error for an invalid index
-      throw new Error("Invalid index");
-    }
+    } 
+    return null ; 
+    // else {
+    //   // Throw an error for an invalid index
+    //   throw new Error("Invalid index");
+    // }
   }
 
   // Method to clear all todos from the list
