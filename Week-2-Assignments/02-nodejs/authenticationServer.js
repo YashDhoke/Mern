@@ -29,9 +29,114 @@
   Testing the server - run `npm run test-authenticationServer` command in terminal
  */
 
-const express = require("express")
-const PORT = 3000;
-const app = express();
-// write your logic here, DONT WRITE app.listen(3000) when you're running tests, the tests will automatically start the server
+const express = require("express");
+const bodyParser = require("body-parser");
+const uuid = require("uuid");  // Using the uuid library to generate unique IDs
 
+const app = express();  // Create an Express application
+const PORT = 3000;
+
+app.use(bodyParser.json());  // Middleware to parse JSON in the request body
+
+const users = [];  // Array to store user data
+
+// Function to check if a username already exists
+const isUsernameTaken = (username) => {
+  return users.some((user) => user.username === username);
+};
+
+// Function to find a user by username and password
+const findUser = (username, password) => {
+  return users.find((user) => user.username === username && user.password === password);
+};
+
+// Middleware to validate authentication for protected routes
+const authenticate = (req, res, next) => {
+  const username = req.headers.username;
+  const password = req.headers.password;
+
+  // Check if username and password are present and valid
+  if (!username || !password || !findUser(username, password)) {
+    return res.status(401).json({ message: "Unauthorized" });
+  }
+
+  // Continue to the next middleware or route handler
+  next();
+};
+
+// POST /signup - User Signup
+app.post("/signup", (req, res) => {
+  const { username, password, firstName, lastName } = req.body;
+
+  // Check if required fields are present in the request body
+  if (!username || !password || !firstName || !lastName) {
+    return res.status(400).json({ message: "Bad Request" });
+  }
+
+  // Check if the username is already taken
+  if (isUsernameTaken(username)) {
+    return res.status(400).json({ message: "Username already exists" });
+  }
+
+  // Create a new user object
+  const newUser = {
+    id: uuid.v4(),  // Generate a unique ID
+    username,
+    password,
+    firstName,
+    lastName,
+  };
+
+  // Add the new user to the array
+  users.push(newUser);
+
+  // Respond with a success message and the user data
+  res.status(201).json({ message: "User created successfully", user: newUser });
+});
+
+// POST /login - User Login
+app.post("/login", (req, res) => {
+  const { username, password } = req.body;
+
+  // Find the user based on the provided username and password
+  const user = findUser(username, password);
+
+  // Check if the user is found
+  if (!user) {
+    return res.status(401).json({ message: "Unauthorized" });
+  }
+
+  // Respond with a success message and user data (excluding password)
+  res.status(200).json({
+    message: "Login successful",
+    user: {
+      id: user.id,
+      firstName: user.firstName,
+      lastName: user.lastName,
+    },
+  });
+});
+
+// GET /data - Fetch all user's names and ids from the server (Protected route)
+app.get("/data", authenticate, (req, res) => {
+  // Map user data to include only id, firstName, and lastName
+  const userArray = users.map((user) => ({
+    id: user.id,
+    firstName: user.firstName,
+    lastName: user.lastName,
+  }));
+
+  // Respond with the array of user data
+  res.status(200).json({ users: userArray });
+});
+
+// For any other route not defined in the server return 404
+app.use((req, res) => {
+  res.status(404).json({ message: "Not Found" });
+});
+
+// Export the app for testing
 module.exports = app;
+
+// Uncomment the line below when running the server manually
+// app.listen(PORT, () => console.log(`Server is running on http://localhost:${PORT}`));
