@@ -21,5 +21,29 @@ const fs = require('fs');
 const path = require('path');
 const app = express();
 
+// GET /files - Returns a list of files present in ./files/ directory
+app.get("/files", async (req, res) => {
+  try {
+    const fileNames = await fs.readdir(filesDirectory);
+    res.status(200).json(fileNames);
+  } catch (error) {
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+});
+
+// GET /file/:filename - Returns content of given file by name
+app.get("/file/:filename", async (req, res) => {
+  const { filename } = req.params;
+  const filePath = path.join(filesDirectory, filename);
+
+  try {
+    const fileContent = await fs.readFile(filePath, "utf8");
+    res.status(200).send(fileContent);
+  } catch (error) {
+    res.status(404).send("File not found");
+  }
+});
+
+
 
 module.exports = app;
