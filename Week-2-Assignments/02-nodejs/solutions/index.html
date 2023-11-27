@@ -5,20 +5,30 @@
 </head>
 <script>
 
-    function deleteDone() {
-        console.log("done delete");
-        // Delete the right todo from the list
-        // You will need to give each todo an id, and that should be enough to remove it
+function deleteDone() {
+    console.log("done delete");
+    
+    // Assuming you want to refresh the list of todos after deletion
+    // You can clear the existing todos and fetch the updated list
+    var mainArea = document.getElementById("mainArea");
+    mainArea.innerHTML = "";  // Clear the existing todos
 
-    }
-    function deleteTodo(id) {
-        fetch("http://localhost:3000/todos/" + id, {
-            method: "DELETE",
-            headers: {
-                "Content-Type": "application/json"
-            }
-        }).then(deleteDone)
-    }
+    // Fetch updated todos
+    getData();
+}
+
+function deleteTodo(id) {
+    var childElementToDelete = document.getElementById("todo-" + id);
+    fetch("http://localhost:3000/todos/" + id, {
+        method: "DELETE",
+        headers: {
+            "Content-Type": "application/json"
+        }
+    }).then(function() {
+        deleteDone(childElementToDelete);
+    });
+}
+
 
     function todosCallback(data) {
         var parentElement = document.getElementById("mainArea");
