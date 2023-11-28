@@ -9,15 +9,42 @@ let COURSES = [];
 
 // Admin routes
 app.post('/admin/signup', (req, res) => {
-  // logic to sign up admin
+  
+    const {username , password} = req.body ; 
+
+    if(ADMINS.some(admin => admin.username === username)) 
+    {
+       return res.status(400).json({error : "Admin with this username already exists"}) ; 
+    }
+
+    const newadmin = {username , password} ; 
+    ADMINS.push(newadmin) ; 
+    res.status(201).json({message : "Admin signed up Successfully"}) ; 
 });
 
 app.post('/admin/login', (req, res) => {
-  // logic to log in admin
+   const {username , password} = req.body ; 
+
+   const admin = ADMINS.find(admin => admin.username === username && admin.password === password) 
+
+   if(!admin) 
+   {
+      res.status(401).json({Error : "Invalid Credentials"}) ; 
+   }
+   else 
+   {
+      res.status(200).json({message : "Admin loged in Successfully"}) ; 
+   }
 });
 
+
+
 app.post('/admin/courses', (req, res) => {
-  // logic to create a course
+   const {coursename} = req.body ; 
+
+   const newcourse = {id : COURSES.length+1 , name : coursename} ; 
+   COURSES.push(newcourse) ; 
+   res.status(201).json({message : "Course created Successfully" , course : newcourse}) ; 
 });
 
 app.put('/admin/courses/:courseId', (req, res) => {
