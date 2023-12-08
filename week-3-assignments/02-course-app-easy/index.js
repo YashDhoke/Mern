@@ -34,7 +34,7 @@ app.post('/admin/login', (req, res) => {
    else 
    {
       res.status(200).json({message : "Admin loged in Successfully"}) ; 
-   }
+   } 
 });
 
 
@@ -48,32 +48,71 @@ app.post('/admin/courses', (req, res) => {
 });
 
 app.put('/admin/courses/:courseId', (req, res) => {
-  // logic to edit a course
+    const courseId = parseInt(req.params.courseId) ; 
+    const {coursename} = req.body ;
+    
+    const courseIndex = COURSES.findIndex(course => course.id === courseId) ; 
+
+    if(courseIndex === -1) 
+    {
+      return res.status(404).json({error : "Could not find the course!"}) ; 
+    }
+
+    COURSES[courseIndex].name = coursename ; 
+    res.status(200).json({message : "Course edited successfully!" , course : COURSES[courseIndex]}) ; 
 });
 
 app.get('/admin/courses', (req, res) => {
-  // logic to get all courses
+   res.status(200).json({courses : COURSES}) ; 
 });
 
 // User routes
 app.post('/users/signup', (req, res) => {
-  // logic to sign up user
+  const {username , password } = req.body ; 
+  
+  if(USERS.some(user => user.username === username)) 
+  {
+    return res.status(400).json({error : "This user already exists"}) ; 
+  }
+
+  const newuser = {username , password} ; 
+  USERS.push(newuser) ; 
+  res.status(200).json({message : "User signed up successfully!"}) ; 
 });
 
 app.post('/users/login', (req, res) => {
-  // logic to log in user
+  const {username , password} = req.body ; 
+
+  const user = USERS.find(user => user.username === username && user.password === password) 
+
+  if(!user) 
+  {
+    res.status(401).json({error : "User not found"}) ; 
+  }
+  else 
+  {
+    res.status(200).json({message : "User logged in succesfully!"}) ; 
+  }
 });
 
 app.get('/users/courses', (req, res) => {
-  // logic to list all courses
+  res.status(200).json({course : COURSES}) ;
 });
 
 app.post('/users/courses/:courseId', (req, res) => {
-  // logic to purchase a course
+  const courseId = parseInt(req.params.courseId);
+
+  const course = COURSES.find((course) => course.id === courseId);
+
+  if (!course) {
+    return res.status(404).json({ error: 'Course not found' });
+  }
+
+  res.status(200).json({ message: 'Course purchased successfully', course });
 });
 
 app.get('/users/purchasedCourses', (req, res) => {
-  // logic to view purchased courses
+   res.status(200).json({ purchasedCourses: [] });
 });
 
 app.listen(3000, () => {
