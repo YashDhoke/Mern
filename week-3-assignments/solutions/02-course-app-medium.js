@@ -118,7 +118,7 @@ app.post('/users/courses/:courseId', authenticateJwt, (req, res) => {
     if (user) {
       if (!user.purchasedCourses) {
         user.purchasedCourses = [];
-      }
+      } 
       user.purchasedCourses.push(course);
       res.json({ message: 'Course purchased successfully' });
     } else {
