@@ -20,7 +20,9 @@ const express = require('express');
 const fs = require('fs');
 const path = require('path');
 const app = express();
+const cors = require("cors") ; 
 
+app.use(cors()) ; 
 // GET /files - Returns a list of files present in ./files/ directory
 app.get("/files", async (req, res) => {
   try {
@@ -47,3 +49,4 @@ app.get("/file/:filename", async (req, res) => {
 
 
 module.exports = app;
+app.listen(3000) ; 
