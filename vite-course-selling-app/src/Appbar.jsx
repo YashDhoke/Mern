@@ -9,11 +9,14 @@ function Appbar() {
         
         <div style = {{display : "flex" , justifyContent : "center"}}>
             <div style = {{marginRight : 10}}>
-                <Button variant="contained">Sign In</Button>
+                <Button variant={"contained"}
+                onClick={() => {window.location = "/signin"}}
+                >Sign In</Button>
             </div>
 
             <div>
-                <Button variant="contained">SignUp</Button>
+                <Button variant={"contained"}
+                onClick={() => {window.location = "/signup"}}>SignUp</Button>
             </div>
               
         </div>
