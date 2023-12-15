@@ -8,8 +8,7 @@ let ADMINS = [];
 let USERS = [];
 let COURSES = [];
 
-const secretKey = yashyash ; 
-
+const secretKey = 'secr3t' ; 
 const generateJwt = (user) => {
   const payload = { username: user.username, };
   return jwt.sign(payload, secretKey, { expiresIn: '1h' });

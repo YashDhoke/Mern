@@ -1,26 +1,36 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import Signup from './Signup' ; 
-import Signin from './Signin';
-import Appbar from './Appbar' ; 
-import AddCourse from './AddCourse';
+import Signup from "./Signup.jsx"
+import Signin from "./Signin.jsx"
+import Appbar from "./Appbar.jsx"
+import AddCourse from "./AddCourse.jsx"
+import Courses from "./Courses.jsx"
+import Course from "./Course.jsx"
 
-// This file shows how you can do routing in React.
-// Try going to /login, /register, /about, /courses on the website and see how the html changes
-// based on the route.
-// You can also try going to /random and see what happens (a route that doesnt exist)
 function App() {
-    return (
-        <div style = {{width : "100vw" , height : "100vh" , backgroundColor : "#eeeeee"}}>
-        <Appbar/>
-        <Router>
-            <Routes>
-                <Route path="/signin" element={<Signin/>} />
-                <Route path="/signup" element={<Signup/>} />
-                <Route path="/addcourse" element = {<AddCourse/>} />
-            </Routes>
-        </Router>
-        </div>
-    );
+
+  return (
+    <>
+    <div style={{
+      // width: "100vw",
+      // height: "100vw",
+      // backgroundColor: "#eeeeee",
+    }}> 
+       {/* 1 Router make sure we are using router to navigate within our react app 
+       2 Routes it's map all the Route and check which route should render when routes are match  */}
+       <Router>
+         <Appbar/>
+          <Routes>
+            <Route path={"/addcourse"} element={<AddCourse/>} />
+            <Route path={"/courses/:courseId"} element={<Course />} />
+            <Route path={"/courses"} element={<Courses/>} />
+            <Route path={"/signup"} element={<Signup />} />
+            <Route path={"/signin"} element={<Signin />} />
+          </Routes>
+       </Router>
+    </div>
+      
+    </>
+  )
 }
 
-export default App;
+export default App
