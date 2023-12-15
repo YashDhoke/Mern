@@ -2,8 +2,10 @@ const express = require('express');
 const jwt = require('jsonwebtoken');
 const fs = require('fs');
 const app = express();
+const cors = require("cors") ; 
 
 app.use(express.json());
+app.use(cors()) ; 
 
 let ADMINS = [];
 let USERS = [];
@@ -67,11 +69,13 @@ app.post('/admin/login', (req, res) => {
 });
 
 app.post('/admin/courses', authenticateJwt, (req, res) => {
+  console.log('hi') ; 
   const course = req.body;
   course.id = COURSES.length + 1;
   COURSES.push(course);
   fs.writeFileSync('courses.json', JSON.stringify(COURSES));
   res.json({ message: 'Course created successfully', courseId: course.id });
+  console.log('hi2') ; 
 });
 
 app.put('/admin/courses/:courseId', authenticateJwt, (req, res) => {
@@ -103,6 +107,12 @@ app.post('/users/signup', (req, res) => {
     res.json({ message: 'User created successfully', token });
   }
 });
+
+app.get('/admin/me' , authenticateJwt , (req,res) => {
+     res.json({
+          username : req.user.username 
+     })
+})
 
 app.post('/users/login', (req, res) => {
   const { username, password } = req.headers;
